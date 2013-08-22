@@ -1,0 +1,3 @@
+namespace OculusParrotKinect.Drone.Commands
+{
+}

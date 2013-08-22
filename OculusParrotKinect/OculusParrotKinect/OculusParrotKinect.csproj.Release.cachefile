@@ -1,0 +1,11 @@
+Content\Shaders\OculusRift.xnb
+Content\test.xnb
+Content\Fonts\FontSmall.xnb
+avcodec-54.dll
+avdevice-54.dll
+avfilter-3.dll
+avformat-54.dll
+avutil-52.dll
+postproc-52.dll
+swresample-0.dll
+swscale-2.dll
