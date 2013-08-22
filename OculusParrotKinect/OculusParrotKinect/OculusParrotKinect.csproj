@@ -118,18 +118,6 @@
     <None Include="Resources\OculusPlugin.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OculusParrotKinect.Drone.Data\OculusParrotKinect.Drone.Data.csproj">
-      <Project>{b3069ee3-4d18-4912-8c20-24a9554ec214}</Project>
-      <Name>OculusParrotKinect.Drone.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\OculusParrotKinect.Drone.Infrastructure\OculusParrotKinect.Drone.Infrastructure.csproj">
-      <Project>{ecb5cc5b-5457-410c-a990-0659fe1446a3}</Project>
-      <Name>OculusParrotKinect.Drone.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\OculusParrotKinect.Drone.Video\OculusParrotKinect.Drone.Video.csproj">
-      <Project>{133e6f27-e497-412e-8d4a-866c95e37be0}</Project>
-      <Name>OculusParrotKinect.Drone.Video</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\OculusParrotKinect.Drone\OculusParrotKinect.Drone.csproj">
       <Project>{a5ad978e-4c35-4b4d-a88e-e4e6610de579}</Project>
       <Name>OculusParrotKinect.Drone</Name>

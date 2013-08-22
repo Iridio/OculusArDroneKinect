@@ -7,16 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OculusParrotKinectContent",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OculusParrotKinect.Drone", "OculusParrotKinect.Drone\OculusParrotKinect.Drone.csproj", "{A5AD978E-4C35-4B4D-A88E-E4E6610DE579}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OculusParrotKinect.Drone.Data", "OculusParrotKinect.Drone.Data\OculusParrotKinect.Drone.Data.csproj", "{B3069EE3-4D18-4912-8C20-24A9554EC214}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OculusParrotKinect.Drone.Infrastructure", "OculusParrotKinect.Drone.Infrastructure\OculusParrotKinect.Drone.Infrastructure.csproj", "{ECB5CC5B-5457-410C-A990-0659FE1446A3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OculusParrotKinect.Drone.Video", "OculusParrotKinect.Drone.Video\OculusParrotKinect.Drone.Video.csproj", "{133E6F27-E497-412E-8D4A-866C95E37BE0}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Drone", "Drone", "{227D26D1-1F70-4BBD-ACA5-52CBB13D8EFC}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kinect", "Kinect", "{7E8383E7-9224-4E56-ABD5-E36B97C6A3DD}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OculusParrotKinect.Kinect", "OculusParrotKinect.Kinect\OculusParrotKinect.Kinect.csproj", "{21915AF9-3538-4F68-A9D6-539EE3E45055}"
 EndProject
 Global
@@ -55,36 +45,6 @@ Global
 		{A5AD978E-4C35-4B4D-A88E-E4E6610DE579}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{A5AD978E-4C35-4B4D-A88E-E4E6610DE579}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{A5AD978E-4C35-4B4D-A88E-E4E6610DE579}.Release|x86.ActiveCfg = Release|Any CPU
-		{B3069EE3-4D18-4912-8C20-24A9554EC214}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B3069EE3-4D18-4912-8C20-24A9554EC214}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B3069EE3-4D18-4912-8C20-24A9554EC214}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{B3069EE3-4D18-4912-8C20-24A9554EC214}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{B3069EE3-4D18-4912-8C20-24A9554EC214}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{B3069EE3-4D18-4912-8C20-24A9554EC214}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B3069EE3-4D18-4912-8C20-24A9554EC214}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B3069EE3-4D18-4912-8C20-24A9554EC214}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{B3069EE3-4D18-4912-8C20-24A9554EC214}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{B3069EE3-4D18-4912-8C20-24A9554EC214}.Release|x86.ActiveCfg = Release|Any CPU
-		{ECB5CC5B-5457-410C-A990-0659FE1446A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ECB5CC5B-5457-410C-A990-0659FE1446A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ECB5CC5B-5457-410C-A990-0659FE1446A3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{ECB5CC5B-5457-410C-A990-0659FE1446A3}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{ECB5CC5B-5457-410C-A990-0659FE1446A3}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{ECB5CC5B-5457-410C-A990-0659FE1446A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ECB5CC5B-5457-410C-A990-0659FE1446A3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ECB5CC5B-5457-410C-A990-0659FE1446A3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{ECB5CC5B-5457-410C-A990-0659FE1446A3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{ECB5CC5B-5457-410C-A990-0659FE1446A3}.Release|x86.ActiveCfg = Release|Any CPU
-		{133E6F27-E497-412E-8D4A-866C95E37BE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{133E6F27-E497-412E-8D4A-866C95E37BE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{133E6F27-E497-412E-8D4A-866C95E37BE0}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{133E6F27-E497-412E-8D4A-866C95E37BE0}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{133E6F27-E497-412E-8D4A-866C95E37BE0}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{133E6F27-E497-412E-8D4A-866C95E37BE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{133E6F27-E497-412E-8D4A-866C95E37BE0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{133E6F27-E497-412E-8D4A-866C95E37BE0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{133E6F27-E497-412E-8D4A-866C95E37BE0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{133E6F27-E497-412E-8D4A-866C95E37BE0}.Release|x86.ActiveCfg = Release|Any CPU
 		{21915AF9-3538-4F68-A9D6-539EE3E45055}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{21915AF9-3538-4F68-A9D6-539EE3E45055}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21915AF9-3538-4F68-A9D6-539EE3E45055}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -98,12 +58,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{B3069EE3-4D18-4912-8C20-24A9554EC214} = {227D26D1-1F70-4BBD-ACA5-52CBB13D8EFC}
-		{ECB5CC5B-5457-410C-A990-0659FE1446A3} = {227D26D1-1F70-4BBD-ACA5-52CBB13D8EFC}
-		{133E6F27-E497-412E-8D4A-866C95E37BE0} = {227D26D1-1F70-4BBD-ACA5-52CBB13D8EFC}
-		{A5AD978E-4C35-4B4D-A88E-E4E6610DE579} = {227D26D1-1F70-4BBD-ACA5-52CBB13D8EFC}
-		{21915AF9-3538-4F68-A9D6-539EE3E45055} = {7E8383E7-9224-4E56-ABD5-E36B97C6A3DD}
 	EndGlobalSection
 EndGlobal
