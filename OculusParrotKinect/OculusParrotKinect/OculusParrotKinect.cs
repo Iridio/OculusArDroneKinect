@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -9,7 +10,6 @@ using OculusParrotKinect.Drone.Video;
 using OculusParrotKinect.Kinect;
 using OculusParrotKinect.Kinect.Events;
 using OculusParrotKinect.Oculus;
-using System;
 
 namespace OculusParrotKinect
 {
@@ -18,7 +18,7 @@ namespace OculusParrotKinect
   /// </summary>
   public class OculusParrotKinect : Game
   {
-    bool goFullScreen = true;
+    bool goFullScreen = false;
     bool drawOculus = true;
     bool drawTestImage = false;
     float scaleImageFactor = 1.0f;
@@ -151,8 +151,8 @@ namespace OculusParrotKinect
             kinectMessage = "Strafe backward Right";
             if (lastCommandSent != "strafebwdright")
             {
-              lastCommandSent = "strafefwdright";
-              droneClient.Progress(Drone.Commands.FlightMode.Progressive, roll: 0.1f, pitch: -0.1f);
+              lastCommandSent = "strafebwdright";
+              droneClient.Progress(Drone.Commands.FlightMode.Progressive, roll: 0.2f, pitch: -0.1f);
             }
             break;
           case KinectClient.GestureCommandType.NoPlayerDetected:
@@ -164,7 +164,7 @@ namespace OculusParrotKinect
             }
             break;
         }
-        OculusHandle(); //spostarlo ad eventi
+        OculusHandle(); //TODO: move from here and put it in its own event handler
       }
     }
     #endregion
@@ -174,7 +174,7 @@ namespace OculusParrotKinect
       base.Initialize();
     }
 
-    //TODO spostarlo nel drone
+    //TODO move this in the drone client
     VideoPacketDecoderWorker videoPacketDecoderWorker;
     DroneClient droneClient;
     OculusClient oculusClient;
@@ -213,12 +213,11 @@ namespace OculusParrotKinect
       oculusRiftDistortionShader = Content.Load<Effect>("Shaders/OculusRift");
       oculusClient = new OculusClient();
       UpdateResolutionAndRenderTargets();
-      screenType = ScreenType.Splash; //Lo splash mostra i comandi
+      screenType = ScreenType.Splash; //The splash show commands
     }
 
     private void OnConfigurationUpdated(DroneConfiguration configuration)
     {
-      //imposto la configurazione
       if (configuration.Video.Codec != VideoCodecType.H264_360P_SLRS || configuration.Video.MaxBitrate != 100 || configuration.Video.BitrateCtrlMode != VideoBitrateControlMode.Dynamic)
       {
         droneClient.Send(configuration.Video.Codec.Set(VideoCodecType.H264_360P_SLRS).ToCommand());
@@ -243,7 +242,6 @@ namespace OculusParrotKinect
     {
       if (viewportWidth != GraphicsDevice.Viewport.Width || viewportHeight != GraphicsDevice.Viewport.Height)
       {
-        //TODO: Cambiare con l'altezza del frame e centrare l'immagine
         viewportWidth = GraphicsDevice.Viewport.Width;
         viewportHeight = GraphicsDevice.Viewport.Height;
         sideBySideLeftSpriteSize = new Rectangle(0, 0, viewportWidth / 2, viewportHeight);
@@ -251,12 +249,12 @@ namespace OculusParrotKinect
       }
     }
 
-    Vector3 headPositionStart = new Vector3();//valorizzato dal metodo TakeOff()
+    Vector3 headPositionStart = new Vector3();//Value is taken from method TakeOff()
     float xThreshold = 0.2f;
     float yThreshold = 0.2f;
     string oculusYText = string.Empty;
     string oculusXText = string.Empty;
-    //Spostamento dx, sx, up, down
+    //head dx, sx, up, down
     private void OculusHandle()
     {
       oculusXText = "On Hold";
@@ -341,7 +339,7 @@ namespace OculusParrotKinect
 
     private void DroneTakeOff()
     {
-      droneClient.FlatTrim();//prima di decollare lancia il flattrim per bilanciare il drone
+      droneClient.FlatTrim();//before take off send this command
       headPositionStart = OculusClient.GetOrientation();
       if (lastCommandSent != "takeoff")
       {
@@ -366,7 +364,7 @@ namespace OculusParrotKinect
 
     private void UpdateFrame()
     {
-      //TODO: spostare questa logica nel client del drone ed esporre solo il frame pronto
+      //TODO: move this in the Drone client and expose the frame (remember locking)
       if (videoFrame == null || videoFrameNumber == videoFrame.Number)
         return;
       videoFrameNumber = videoFrame.Number;
@@ -401,7 +399,7 @@ namespace OculusParrotKinect
 
       if (drawOculus)
       {
-        //Set the four Distortion paarams of the oculus
+        //Set the four Distortion params of the oculus
         oculusRiftDistortionShader.Parameters["distK0"].SetValue(oculusClient.DistK0);
         oculusRiftDistortionShader.Parameters["distK1"].SetValue(oculusClient.DistK1);
         oculusRiftDistortionShader.Parameters["distK2"].SetValue(oculusClient.DistK2);

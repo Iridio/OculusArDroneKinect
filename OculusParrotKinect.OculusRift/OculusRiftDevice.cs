@@ -1,6 +1,7 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
+using Microsoft.Xna.Framework;
+using OculusParrotKinect.OculusRift;
 
 namespace OculusParrotKinect.Oculus
 {

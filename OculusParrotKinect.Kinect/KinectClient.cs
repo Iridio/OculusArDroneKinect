@@ -164,7 +164,6 @@ namespace OculusParrotKinect.Kinect
             bool backwardLeft = handLeft.Position.Y > hip.Position.Y && spine.Position.Z - handLeft.Position.Z < 0.2;
             bool backwardRight = handRight.Position.Y > hip.Position.Y && spine.Position.Z - handRight.Position.Z < 0.2;
 
-            //TODO Test the newly implemented backwardleft and backwardright
             if (left && !forwardRight && !right && !backwardRight)
             {
               OnGestureCommandRecognized(new GestureCommandRecognizedEventArgs(GestureCommandType.StrafeLeft));
