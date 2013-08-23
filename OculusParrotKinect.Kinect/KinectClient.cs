@@ -41,32 +41,30 @@ namespace OculusParrotKinect.Kinect
 
     public void Dispose()
     {
-      if (null != this.sensor)
+      if (sensor != null)
       {
-        this.sensor.SkeletonFrameReady -= SkeletonFrameReady;
-        this.sensor.AudioSource.Stop();
-        this.sensor.Stop();
-        this.sensor = null;
+        sensor.SkeletonFrameReady -= SkeletonFrameReady;
+        sensor.AudioSource.Stop();
+        sensor.Stop();
+        sensor = null;
       }
-      if (null != this.speechEngine)
+      if (speechEngine != null)
       {
-        this.speechEngine.SpeechRecognized -= SpeechRecognized;
-        this.speechEngine.SpeechRecognitionRejected -= SpeechRejected;
-        this.speechEngine.RecognizeAsyncStop();
+        speechEngine.SpeechRecognized -= SpeechRecognized;
+        speechEngine.SpeechRecognitionRejected -= SpeechRejected;
+        speechEngine.RecognizeAsyncStop();
       }
     }
 
     private void SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
     {
-      const double ConfidenceThreshold = 0.6;
-      if (e.Result.Confidence >= ConfidenceThreshold)
+      if (e.Result.Confidence >= 0.6f)
       {
         switch (e.Result.Semantics.Value.ToString())
         {
           case VoiceCommands.TakeOff:
             OnVoiceCommandRecognized(new VoiceCommandRecognizedEventArgs(VoiceCommandType.TakeOff));
             break;
-
           case VoiceCommands.Land:
             OnVoiceCommandRecognized(new VoiceCommandRecognizedEventArgs(VoiceCommandType.Land));
             break;
@@ -91,40 +89,38 @@ namespace OculusParrotKinect.Kinect
       {
         if (potentialSensor.Status == KinectStatus.Connected)
         {
-          this.sensor = potentialSensor;
+          sensor = potentialSensor;
           break;
         }
       }
-      if (null != this.sensor)
+      if (sensor != null)
       {
         try
         {
-          this.sensor.SkeletonStream.Enable(new TransformSmoothParameters() { Smoothing = 0.5f, Correction = 0.5f, Prediction = 0.5f, JitterRadius = 0.05f, MaxDeviationRadius = 0.04f });
-          this.sensor.SkeletonFrameReady += SkeletonFrameReady;
-          this.sensor.Start();
+          sensor.SkeletonStream.Enable(new TransformSmoothParameters() { Smoothing = 0.5f, Correction = 0.5f, Prediction = 0.5f, JitterRadius = 0.05f, MaxDeviationRadius = 0.04f });
+          sensor.SkeletonFrameReady += SkeletonFrameReady;
+          sensor.Start();
         }
         catch (IOException)
         {
-          this.sensor = null;
+          sensor = null;
         }
       }
-      if (null == this.sensor)
-        throw new Exception(Messages.KinectNotFound);
-      RecognizerInfo ri = GetKinectRecognizer(culture);
-      if (null != ri)
+      if (sensor == null)
+        throw new Exception("Kinect not found.");
+
+      RecognizerInfo recognizerInfo = GetKinectRecognizer(culture);
+      if (recognizerInfo != null)
       {
-        this.speechEngine = new SpeechRecognitionEngine(ri.Id);
-        speechEngine.LoadGrammar(VoiceCommands.GetGrammar(ri.Culture));
+        speechEngine = new SpeechRecognitionEngine(recognizerInfo.Id);
+        speechEngine.LoadGrammar(VoiceCommands.GetCommandsGrammar(recognizerInfo.Culture));
         speechEngine.SpeechRecognized += SpeechRecognized;
         speechEngine.SpeechRecognitionRejected += SpeechRejected;
-        // For long recognition sessions (a few hours or more), it may be beneficial to turn off adaptation of the acoustic model. 
-        // This will prevent recognition accuracy from degrading over time.
-        //speechEngine.UpdateRecognizerSetting("AdaptationOn", 0);
         speechEngine.SetInputToAudioStream(sensor.AudioSource.Start(), new SpeechAudioFormatInfo(EncodingFormat.Pcm, 16000, 16, 1, 32000, 2, null));
         speechEngine.RecognizeAsync(RecognizeMode.Multiple);
       }
       else
-        throw new Exception(Messages.KinectNotFound);
+        throw new Exception("Kinect not found.");
     }
 
     private static RecognizerInfo GetKinectRecognizer(string culture)
@@ -158,21 +154,23 @@ namespace OculusParrotKinect.Kinect
             var elbowLeft = playerSkeleton.Joints[JointType.ElbowLeft];
             var elbowRight = playerSkeleton.Joints[JointType.ElbowRight];
             var hip = playerSkeleton.Joints[JointType.HipCenter];
-            //StatusMessage = String.Format("Left Hand X:{0} Y:{1} Z:{2} - Right Hand X:{3} Y:{4} Z:{5}", handLeft.Position.X, handLeft.Position.Y, handLeft.Position.Z, handRight.Position.X, handRight.Position.Y, handRight.Position.Z);
+            //for debug
             StatusMessage = String.Format("LH z:{0} - S X:{1} ", handLeft.Position.Z, spine.Position.Z);
 
             bool left = handLeft.Position.Y > hip.Position.Y && handLeft.Position.X < elbowLeft.Position.X && ((elbowLeft.Position.X - handLeft.Position.X) > -0.2);
             bool right = handRight.Position.Y > hip.Position.Y && handRight.Position.X > elbowRight.Position.X && ((handRight.Position.X - elbowRight.Position.X) > 0.2);
             bool forwardLeft = handLeft.Position.Y > hip.Position.Y && spine.Position.Z - handLeft.Position.Z > 0.5;
             bool forwardRight = handRight.Position.Y > hip.Position.Y && spine.Position.Z - handRight.Position.Z > 0.5;
-            bool backward = handLeft.Position.Y > hip.Position.Y && handRight.Position.Y > hip.Position.Y && spine.Position.Z - handLeft.Position.Z < 0.2 && spine.Position.Z - handRight.Position.Z < 0.2;
-            //TODO sistemare anche il backward left e right
-            if (left && !forwardRight && !right && !backward)
+            bool backwardLeft = handLeft.Position.Y > hip.Position.Y && spine.Position.Z - handLeft.Position.Z < 0.2;
+            bool backwardRight = handRight.Position.Y > hip.Position.Y && spine.Position.Z - handRight.Position.Z < 0.2;
+
+            //TODO Test the newly implemented backwardleft and backwardright
+            if (left && !forwardRight && !right && !backwardRight)
             {
               OnGestureCommandRecognized(new GestureCommandRecognizedEventArgs(GestureCommandType.StrafeLeft));
               return;
             }
-            if (!left && !forwardLeft && right && !backward)
+            if (!left && !forwardLeft && right && !backwardLeft)
             {
               OnGestureCommandRecognized(new GestureCommandRecognizedEventArgs(GestureCommandType.StrafeRight));
               return;
@@ -182,7 +180,7 @@ namespace OculusParrotKinect.Kinect
               OnGestureCommandRecognized(new GestureCommandRecognizedEventArgs(GestureCommandType.StrafeForwardLeft));
               return;
             }
-            if (left && backward && !right)
+            if (left && backwardRight && !right)
             {
               OnGestureCommandRecognized(new GestureCommandRecognizedEventArgs(GestureCommandType.StrafeBackwardLeft));
               return;
@@ -197,12 +195,12 @@ namespace OculusParrotKinect.Kinect
               OnGestureCommandRecognized(new GestureCommandRecognizedEventArgs(GestureCommandType.StrafeForwardRigth));
               return;
             }
-            if (right && backward && !left)
+            if (right && backwardLeft && !left)
             {
               OnGestureCommandRecognized(new GestureCommandRecognizedEventArgs(GestureCommandType.StrafeBackwardRight));
               return;
             }
-            if (backward && !left && !right)
+            if (backwardRight && backwardLeft && !left && !right)
             {
               OnGestureCommandRecognized(new GestureCommandRecognizedEventArgs(GestureCommandType.Backward));
               return;

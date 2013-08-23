@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OculusParrotKinect.Drone", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OculusParrotKinect.Kinect", "OculusParrotKinect.Kinect\OculusParrotKinect.Kinect.csproj", "{21915AF9-3538-4F68-A9D6-539EE3E45055}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OculusParrotKinect.OculusRift", "OculusParrotKinect.OculusRift\OculusParrotKinect.OculusRift.csproj", "{AE4CE294-06CF-467C-BB9B-4B2EB9783ED9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,16 @@ Global
 		{21915AF9-3538-4F68-A9D6-539EE3E45055}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{21915AF9-3538-4F68-A9D6-539EE3E45055}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{21915AF9-3538-4F68-A9D6-539EE3E45055}.Release|x86.ActiveCfg = Release|Any CPU
+		{AE4CE294-06CF-467C-BB9B-4B2EB9783ED9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE4CE294-06CF-467C-BB9B-4B2EB9783ED9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE4CE294-06CF-467C-BB9B-4B2EB9783ED9}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{AE4CE294-06CF-467C-BB9B-4B2EB9783ED9}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{AE4CE294-06CF-467C-BB9B-4B2EB9783ED9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AE4CE294-06CF-467C-BB9B-4B2EB9783ED9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE4CE294-06CF-467C-BB9B-4B2EB9783ED9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE4CE294-06CF-467C-BB9B-4B2EB9783ED9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{AE4CE294-06CF-467C-BB9B-4B2EB9783ED9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{AE4CE294-06CF-467C-BB9B-4B2EB9783ED9}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

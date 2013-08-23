@@ -2,13 +2,12 @@
 using System;
 using System.Runtime.InteropServices;
 
-#if WINDOWS
 namespace OculusParrotKinect.Oculus
 {
   /// <summary>
   /// Interop wrapper class for interacting with Rift
   /// </summary>
-  public class OculusRiftDevice
+  internal class OculusRiftDevice
   {
     // Fields
     private static float AccelGain;
@@ -125,7 +124,7 @@ namespace OculusParrotKinect.Oculus
       OVRInit |= OVR_GetInterpupillaryDistance(ref IPD);
       OVRInit |= OVR_GetLensSeparationDistance(ref LensSeparationDistance);
 
-      //Leggo le distorsioni
+      //Get the distorsion coefficients
       OVR_GetDistortionCoefficients(ref DistK0, ref DistK1, ref DistK2, ref DistK3);
 
       return OVRInit;
@@ -192,4 +191,3 @@ namespace OculusParrotKinect.Oculus
     }
   }
 }
-#endif

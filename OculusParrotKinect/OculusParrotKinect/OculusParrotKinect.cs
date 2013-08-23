@@ -18,9 +18,9 @@ namespace OculusParrotKinect
   /// </summary>
   public class OculusParrotKinect : Game
   {
-    bool goFullScreen = false;
+    bool goFullScreen = true;
     bool drawOculus = true;
-    bool drawTestImage = true;
+    bool drawTestImage = false;
     float scaleImageFactor = 1.0f;
 
     GraphicsDeviceManager graphics;
@@ -261,7 +261,7 @@ namespace OculusParrotKinect
     {
       oculusXText = "On Hold";
       oculusYText = "On Hold";
-      var cameraPositionNew = oculusClient.GetDirection();
+      var cameraPositionNew = OculusClient.GetOrientation();
       var delta = headPositionStart.X - cameraPositionNew.X;
       var compare = delta;
       if (delta < 0)
@@ -342,7 +342,7 @@ namespace OculusParrotKinect
     private void DroneTakeOff()
     {
       droneClient.FlatTrim();//prima di decollare lancia il flattrim per bilanciare il drone
-      headPositionStart = oculusClient.GetDirection();
+      headPositionStart = OculusClient.GetOrientation();
       if (lastCommandSent != "takeoff")
       {
         droneClient.Takeoff();

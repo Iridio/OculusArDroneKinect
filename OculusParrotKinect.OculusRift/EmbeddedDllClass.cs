@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-#if WINDOWS
 namespace OculusParrotKinect.Oculus
 {
   internal class EmbeddedDllClass
@@ -15,17 +14,11 @@ namespace OculusParrotKinect.Oculus
     internal static void ExtractEmbeddedDlls(string dllName, byte[] resourceBytes)
     {
       Assembly assem = Assembly.GetExecutingAssembly();
-      string[] names = assem.GetManifestResourceNames();
       AssemblyName an = assem.GetName();
-
       tempFolder = String.Format("{0}.{1}.{2}", an.Name, an.ProcessorArchitecture, an.Version);
-
       string dirName = Path.Combine(Path.GetTempPath(), tempFolder);
       if (!Directory.Exists(dirName))
-      {
         Directory.CreateDirectory(dirName);
-      }
-
       // Add the temporary dirName to the PATH environment variable (at the head!)
       string path = Environment.GetEnvironmentVariable("PATH");
       string[] pathPieces = path.Split(';');
@@ -39,9 +32,7 @@ namespace OculusParrotKinect.Oculus
         }
       }
       if (!found)
-      {
         Environment.SetEnvironmentVariable("PATH", String.Format("{0};{1}", dirName, path));
-      }
 
       // See if the file exists, avoid rewriting it if not necessary
       string dllPath = Path.Combine(dirName, dllName);
@@ -50,14 +41,10 @@ namespace OculusParrotKinect.Oculus
       {
         byte[] existing = File.ReadAllBytes(dllPath);
         if (resourceBytes.SequenceEqual(existing))
-        {
           rewrite = false;
-        }
       }
       if (rewrite)
-      {
         File.WriteAllBytes(dllPath, resourceBytes);
-      }
     }
 
     [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Unicode)]
@@ -70,9 +57,7 @@ namespace OculusParrotKinect.Oculus
     static internal void LoadDll(string dllName)
     {
       if (tempFolder == "")
-      {
         throw new Exception("Please call ExtractEmbeddedDlls before LoadDll");
-      }
       IntPtr h = LoadLibrary(dllName);
       if (h == IntPtr.Zero)
       {
@@ -80,7 +65,5 @@ namespace OculusParrotKinect.Oculus
         throw new DllNotFoundException(String.Format("Unable to load library: {0} from {1}", dllName, tempFolder), e);
       }
     }
-
   }
 }
-#endif
