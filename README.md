@@ -12,7 +12,7 @@ With both hands near the shoulders -> move the drone backward<br />
 With left arm extended to the left and right arm along the body -> move the drone to the left<br />
 With left arm extended to the left and right arm forward -> move forward and to the left the drone<br />
 With left arm extended to the left and right hand near the right shoulder -> move backward and to the left the drone<br />
-The right movements are simpy the left ones mirrored.<br />
+The right movements are simply the left ones mirrored.<br />
 
 ## Credits
 For the Ar.Drone library, I used the one from [Ruslan Balanukhin](https://github.com/Ruslan-B).<br />
