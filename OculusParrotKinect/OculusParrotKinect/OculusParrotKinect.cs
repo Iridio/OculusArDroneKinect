@@ -304,7 +304,7 @@ namespace OculusParrotKinect
         else
         {
           oculusYText = "Down";
-          if (lastCommandSent != "up")
+          if (lastCommandSent != "down")
           {
             lastCommandSent = "down";
             droneClient.Progress(Drone.Commands.FlightMode.Progressive, gaz: -0.4f);
