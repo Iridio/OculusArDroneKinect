@@ -10,6 +10,11 @@ using OculusParrotKinect.Drone.Video;
 using OculusParrotKinect.Kinect;
 using OculusParrotKinect.Kinect.Events;
 using OculusParrotKinect.Oculus;
+using Emgu.CV.Structure;
+using Emgu.CV;
+using System.Collections.Generic;
+using System.Drawing;
+using Emgu.CV.CvEnum;
 
 namespace OculusParrotKinect
 {
@@ -19,9 +24,11 @@ namespace OculusParrotKinect
   public class OculusParrotKinect : Game
   {
     bool goFullScreen = false;
-    bool drawOculus = true;
+    bool drawOculus = false;
     bool drawTestImage = false;
+    bool detectFaces = false;
     float scaleImageFactor = 1.0f;
+    const int FacesFrameInterval = 15;
 
     GraphicsDeviceManager graphics;
     SpriteBatch spriteBatch;
@@ -71,6 +78,15 @@ namespace OculusParrotKinect
             droneClient.Send(droneClient.Configuration.Video.Channel.Set(VideoChannelType.Next).ToCommand());
             kinectMessage = "Change camera";
             break;
+          case KinectClient.VoiceCommandType.DetectFacesOn:
+            detectFaces = true;
+            kinectMessage = "Detect faces on";
+            break;
+          case KinectClient.VoiceCommandType.DetectFacesOff:
+            detectFaces = false;
+            kinectMessage = "Detect faces off";
+            break;
+
         }
       }
     }
@@ -180,7 +196,7 @@ namespace OculusParrotKinect
     OculusClient oculusClient;
     KinectClient kinect;
     RenderTarget2D renderTarget;
-    Color[] colorData;
+    Microsoft.Xna.Framework.Color[] colorData;
     protected override void LoadContent()
     {
       renderTarget = new RenderTarget2D(GraphicsDevice, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
@@ -191,7 +207,7 @@ namespace OculusParrotKinect
       else
         videoTexture = new Texture2D(GraphicsDevice, 640, 360, false, SurfaceFormat.Color);
 
-      colorData = new Color[640 * 360];
+      colorData = new Microsoft.Xna.Framework.Color[640 * 360];
       videoPacketDecoderWorker = new VideoPacketDecoderWorker(PixelFormat.BGR24, true, OnVideoPacketDecoded);
       videoPacketDecoderWorker.Start();
       droneClient = new DroneClient();
@@ -236,16 +252,16 @@ namespace OculusParrotKinect
 
     private int viewportWidth;
     private int viewportHeight;
-    private Rectangle sideBySideLeftSpriteSize;
-    private Rectangle sideBySideRightSpriteSize;
+    private Microsoft.Xna.Framework.Rectangle sideBySideLeftSpriteSize;
+    private Microsoft.Xna.Framework.Rectangle sideBySideRightSpriteSize;
     private void UpdateResolutionAndRenderTargets()
     {
       if (viewportWidth != GraphicsDevice.Viewport.Width || viewportHeight != GraphicsDevice.Viewport.Height)
       {
         viewportWidth = GraphicsDevice.Viewport.Width;
         viewportHeight = GraphicsDevice.Viewport.Height;
-        sideBySideLeftSpriteSize = new Rectangle(0, 0, viewportWidth / 2, viewportHeight);
-        sideBySideRightSpriteSize = new Rectangle(viewportWidth / 2, 0, viewportWidth / 2, viewportHeight);
+        sideBySideLeftSpriteSize = new Microsoft.Xna.Framework.Rectangle(0, 0, viewportWidth / 2, viewportHeight);
+        sideBySideRightSpriteSize = new Microsoft.Xna.Framework.Rectangle(viewportWidth / 2, 0, viewportWidth / 2, viewportHeight);
       }
     }
 
@@ -362,29 +378,50 @@ namespace OculusParrotKinect
         videoPacketDecoderWorker.EnqueuePacket(packet);
     }
 
+    private HaarCascade haarCascade = new HaarCascade("haarcascade_frontalface_default.xml");
+
+    MCvAvgComp[] faceRects = new MCvAvgComp[0];
+
     private void UpdateFrame()
     {
       //TODO: move this in the Drone client and expose the frame (remember locking)
       if (videoFrame == null || videoFrameNumber == videoFrame.Number)
         return;
       videoFrameNumber = videoFrame.Number;
-      byte[] bgrData = videoFrame.Data;
-      for (int i = 0; i < colorData.Length; i++)
-        colorData[i] = new Color(bgrData[3 * i + 2], bgrData[3 * i + 1], bgrData[3 * i]);
+
+      //move to a separate thread?
+      var imgBgr = new Image<Bgr, Byte>(640, 360) { Bytes = videoFrame.Data };
+      if (detectFaces)
+      {
+        //For performance reasons I search for faces every tot frames
+        if (videoFrameNumber % FacesFrameInterval == 0)
+        {
+          var gray = imgBgr.Convert<Gray, Byte>();
+          MCvAvgComp[][] facesDetected = gray.DetectHaarCascade(haarCascade, 1.2, 2, HAAR_DETECTION_TYPE.DO_CANNY_PRUNING, new Size(40, 40));
+          faceRects = facesDetected[0];
+        }
+        foreach (var face in faceRects)
+          imgBgr.Draw(face.rect, new Bgr(System.Drawing.Color.White), 2);
+      }
+      byte[] bgrData = imgBgr.Bytes; //For performance. Accessing imgBgr.Bytes is slow as hell.
+      var colorDataLength = colorData.Length;
+      for (int i = 0; i < colorDataLength; i++)
+        colorData[i] = new Microsoft.Xna.Framework.Color(bgrData[3 * i + 2], bgrData[3 * i + 1], bgrData[3 * i]);
+
       if (videoTexture.GraphicsDevice.Textures[0] == videoTexture)
         videoTexture.GraphicsDevice.Textures[0] = null;
-      videoTexture.SetData<Color>(0, null, colorData, 0, colorData.Length);
+      videoTexture.SetData<Microsoft.Xna.Framework.Color>(0, null, colorData, 0, colorData.Length);
     }
 
     Texture2D renderTexture;
     protected override void Draw(GameTime gameTime)
     {
       GraphicsDevice.SetRenderTarget(renderTarget);
-      GraphicsDevice.Clear(Color.Black);
+      GraphicsDevice.Clear(Microsoft.Xna.Framework.Color.Black);
       spriteBatch.Begin();
       if (screenType == ScreenType.Drive)
       {
-        spriteBatch.Draw(videoTexture, new Rectangle(0, 40, 1280, 800), Color.White);//1280X720 su 1280x800
+        spriteBatch.Draw(videoTexture, new Microsoft.Xna.Framework.Rectangle(0, 40, 1280, 800), Microsoft.Xna.Framework.Color.White);//1280X720 on 1280x800
         DrawHud(spriteBatch);
       }
       else
@@ -395,7 +432,7 @@ namespace OculusParrotKinect
 
       GraphicsDevice.SetRenderTarget(null);
       renderTexture = (Texture2D)renderTarget;
-      GraphicsDevice.Clear(Color.Black);
+      GraphicsDevice.Clear(Microsoft.Xna.Framework.Color.Black);
 
       if (drawOculus)
       {
@@ -408,18 +445,18 @@ namespace OculusParrotKinect
 
         oculusRiftDistortionShader.Parameters["drawLeftLens"].SetValue(true);
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, null, null, null, oculusRiftDistortionShader);
-        spriteBatch.Draw(renderTexture, sideBySideLeftSpriteSize, Color.White);
+        spriteBatch.Draw(renderTexture, sideBySideLeftSpriteSize, Microsoft.Xna.Framework.Color.White);
         spriteBatch.End();
 
         oculusRiftDistortionShader.Parameters["drawLeftLens"].SetValue(false);
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, null, null, null, oculusRiftDistortionShader);
-        spriteBatch.Draw(renderTexture, sideBySideRightSpriteSize, Color.White);
+        spriteBatch.Draw(renderTexture, sideBySideRightSpriteSize, Microsoft.Xna.Framework.Color.White);
         spriteBatch.End();
       }
       else
       {
         spriteBatch.Begin();
-        spriteBatch.Draw(renderTexture, new Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height), Color.White);
+        spriteBatch.Draw(renderTexture, new Microsoft.Xna.Framework.Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height), Microsoft.Xna.Framework.Color.White);
         spriteBatch.End();
       }
       base.Draw(gameTime);
@@ -427,19 +464,21 @@ namespace OculusParrotKinect
 
     private void DrawHelp(SpriteBatch spriteBatch)
     {
-      spriteBatch.DrawString(hudFontSmall, String.Format("Voice Commands: Drone decolla, Drone atterra, Cambio camera, Emergenza", oculusXText, oculusYText), new Vector2(400, 220), Color.Blue);
-      spriteBatch.DrawString(hudFontSmall, String.Format("Gesture Commands: ", oculusXText, oculusYText), new Vector2(400, 240), Color.Blue);
-      spriteBatch.DrawString(hudFontSmall, String.Format("        Left hand or right hand over elbow -> strafe", oculusXText, oculusYText), new Vector2(400, 260), Color.Blue);
-      spriteBatch.DrawString(hudFontSmall, String.Format("        Both hands forward or near shoulders -> forward/backward", oculusXText, oculusYText), new Vector2(400, 280), Color.Blue);
+      spriteBatch.DrawString(hudFontSmall, String.Format("Voice Commands: Drone decolla, Drone atterra, Cambio camera, Emergenza,", oculusXText, oculusYText), new Vector2(400, 220), Microsoft.Xna.Framework.Color.Blue);
+      spriteBatch.DrawString(hudFontSmall, String.Format("                Drone identifica, Drone privacy", oculusXText, oculusYText), new Vector2(400, 240), Microsoft.Xna.Framework.Color.Blue);
+
+      spriteBatch.DrawString(hudFontSmall, String.Format("Gesture Commands: ", oculusXText, oculusYText), new Vector2(400, 300), Microsoft.Xna.Framework.Color.Blue);
+      spriteBatch.DrawString(hudFontSmall, String.Format("        Left hand or right hand over elbow -> strafe", oculusXText, oculusYText), new Vector2(400, 320), Microsoft.Xna.Framework.Color.Blue);
+      spriteBatch.DrawString(hudFontSmall, String.Format("        Both hands forward or near shoulders -> forward/backward", oculusXText, oculusYText), new Vector2(400, 340), Microsoft.Xna.Framework.Color.Blue);
     }
 
     private void DrawHud(SpriteBatch spriteBatch)
     {
       //spriteBatch.DrawString(hudFontSmall, String.Format("Left<->Right: {0}  Top<->Down: {1}", oculusXText, oculusYText), new Vector2(400, 220), Color.White);
-      spriteBatch.DrawString(hudFontSmall, String.Format("Last command: {0}", lastCommandSent), new Vector2(400, 240), Color.White);
+      spriteBatch.DrawString(hudFontSmall, String.Format("Last command: {0}", lastCommandSent), new Vector2(400, 240), Microsoft.Xna.Framework.Color.White);
 
       //spriteBatch.DrawString(hudFontSmall, String.Format("{0} - {1}", kinectMessage, kinectStatusMessage), new Vector2(400, 560), Color.White);
-      spriteBatch.DrawString(hudFontSmall, String.Format("Battery: {0}%  Altitude: {1}", droneClient.NavigationData.Battery.Percentage, droneClient.NavigationData.Altitude), new Vector2(400, 540), Color.White);
+      spriteBatch.DrawString(hudFontSmall, String.Format("Battery: {0}%  Altitude: {1}", droneClient.NavigationData.Battery.Percentage, droneClient.NavigationData.Altitude), new Vector2(400, 540), Microsoft.Xna.Framework.Color.White);
     }
   }
 }

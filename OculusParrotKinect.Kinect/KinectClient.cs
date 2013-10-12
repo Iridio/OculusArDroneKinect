@@ -24,7 +24,7 @@ namespace OculusParrotKinect.Kinect
         GestureCommandRecognized(this, e);
     }
 
-    public enum VoiceCommandType { TakeOff, Land, Emergency, ChangeCamera };
+    public enum VoiceCommandType { TakeOff, Land, Emergency, ChangeCamera, DetectFacesOn, DetectFacesOff };
     public EventHandler<VoiceCommandRecognizedEventArgs> VoiceCommandRecognized;
     public EventHandler VoiceCommandRejected;
     protected virtual void OnVoiceCommandRecognized(VoiceCommandRecognizedEventArgs e)
@@ -73,6 +73,12 @@ namespace OculusParrotKinect.Kinect
             break;
           case VoiceCommands.ChangeCamera:
             OnVoiceCommandRecognized(new VoiceCommandRecognizedEventArgs(VoiceCommandType.ChangeCamera));
+            break;
+          case VoiceCommands.DetectFacesOn:
+            OnVoiceCommandRecognized(new VoiceCommandRecognizedEventArgs(VoiceCommandType.DetectFacesOn));
+            break;
+          case VoiceCommands.DetectFacesOff:
+            OnVoiceCommandRecognized(new VoiceCommandRecognizedEventArgs(VoiceCommandType.DetectFacesOff));
             break;
         }
       }

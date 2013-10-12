@@ -5,6 +5,7 @@ An XNA project to control an [Ar.Drone](http://ardrone2.parrot.com/) with [Kinec
 ## Voice commands
 Voice commands are specified in the class VoiceCommands.cs<br />
 Commands supported are: take off, land, emergency, change camera<br />
+ Activate and deactivate Face recognition
 
 ## Gesture
 With both arms forward -> move the drone forward<br />
@@ -25,3 +26,8 @@ This is just a project I made for fun and as an excuse to mess around with some 
 The code is a mess and don't expect fancy HUD or whatever, it just works :).<br />
 Till now I was only focused on having the pieces to work together. I plan to organize and better implement the code in my spare time.<br />
 [Here you can see a simple video of it working](http://www.youtube.com/watch?v=8VuLyabbkWg)
+
+
+##Updates
+- Fixed some bugs
+- Added faces detection activated by voice commands

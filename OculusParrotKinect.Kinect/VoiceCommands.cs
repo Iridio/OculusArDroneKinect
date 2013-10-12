@@ -9,6 +9,8 @@ namespace OculusParrotKinect.Kinect
     public const string Land = "Land";
     public const string Emergency = "Emergency";
     public const string ChangeCamera = "ChangeCamera";
+    public const string DetectFacesOn = "DetectFacesOn";
+    public const string DetectFacesOff = "DetectFacesOff";
 
     public static Grammar GetCommandsGrammar(CultureInfo culture)
     {
@@ -20,6 +22,8 @@ namespace OculusParrotKinect.Kinect
       commands.Add(new SemanticResultValue("drone atterra", Land));
       commands.Add(new SemanticResultValue("emergenza", Emergency));
       commands.Add(new SemanticResultValue("cambia camera", ChangeCamera));
+      commands.Add(new SemanticResultValue("drone identifica", DetectFacesOn));
+      commands.Add(new SemanticResultValue("drone privacy", DetectFacesOff));
       //}
       var gb = new GrammarBuilder { Culture = culture };
       gb.Append(commands);
