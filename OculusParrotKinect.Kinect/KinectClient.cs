@@ -16,7 +16,7 @@ namespace OculusParrotKinect.Kinect
     private KinectSensor sensor;
     private SpeechRecognitionEngine speechEngine;
 
-    public enum GestureCommandType { Hover, StrafeLeft, StrafeRight, Forward, Backward, StrafeForwardLeft, StrafeForwardRigth, StrafeBackwardLeft, StrafeBackwardRight, NoPlayerDetected }
+    public enum GestureCommandType { Hover, StrafeLeft, StrafeRight, Forward, Backward, StrafeForwardLeft, StrafeForwardRight, StrafeBackwardLeft, StrafeBackwardRight, NoPlayerDetected }
     public EventHandler<GestureCommandRecognizedEventArgs> GestureCommandRecognized;
     protected virtual void OnGestureCommandRecognized(GestureCommandRecognizedEventArgs e)
     {
@@ -197,7 +197,7 @@ namespace OculusParrotKinect.Kinect
             }
             if (right && forwardLeft && !left)
             {
-              OnGestureCommandRecognized(new GestureCommandRecognizedEventArgs(GestureCommandType.StrafeForwardRigth));
+              OnGestureCommandRecognized(new GestureCommandRecognizedEventArgs(GestureCommandType.StrafeForwardRight));
               return;
             }
             if (right && backwardLeft && !left)

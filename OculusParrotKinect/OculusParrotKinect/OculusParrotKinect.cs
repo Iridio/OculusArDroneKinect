@@ -37,7 +37,11 @@ namespace OculusParrotKinect
 
     string kinectMessage = string.Empty;
     string kinectStatusMessage = string.Empty;
-    string lastCommandSent = String.Empty;
+
+    //string lastCommandSent = String.Empty;
+    enum CommandType { Hover, StrafeLeft, StrafeRight, Forward, Backward, StrafeForwardLeft, StrafeForwardRight, StrafeBackwardLeft, StrafeBackwardRight, NoPlayerDetected, TurnRight, TurnLeft, GoUp, GoDown, TakeOff };
+    CommandType lastCommandSent = CommandType.NoPlayerDetected;
+
     enum ScreenType { Splash, Drive }
     ScreenType screenType;
 
@@ -100,82 +104,82 @@ namespace OculusParrotKinect
         switch (e.GestureCommand)
         {
           case KinectClient.GestureCommandType.Hover:
-            kinectMessage = "Hover";
-            if (lastCommandSent != "hover")
+            if (lastCommandSent != CommandType.Hover)
             {
-              lastCommandSent = "hover";
+              kinectMessage = "Hover";
+              lastCommandSent = CommandType.Hover;
               droneClient.Progress(Drone.Commands.FlightMode.Progressive, 0, 0, 0, 0);
             }
             break;
           case KinectClient.GestureCommandType.StrafeLeft:
-            kinectMessage = "Strafe Left";
-            if (lastCommandSent != "strafeleft")
+            if (lastCommandSent != CommandType.StrafeLeft)
             {
-              lastCommandSent = "strafeleft";
+              lastCommandSent = CommandType.StrafeLeft;
+              kinectMessage = "Strafe Left";
               droneClient.Progress(Drone.Commands.FlightMode.Progressive, roll: -0.07f);
             }
             break;
           case KinectClient.GestureCommandType.StrafeRight:
-            kinectMessage = "Strafe Right";
-            if (lastCommandSent != "straferight")
+            if (lastCommandSent != CommandType.StrafeRight)
             {
-              lastCommandSent = "straferight";
+              kinectMessage = "Strafe Right";
+              lastCommandSent = CommandType.StrafeRight;
               droneClient.Progress(Drone.Commands.FlightMode.Progressive, roll: 0.07f);
             }
             break;
           case KinectClient.GestureCommandType.Forward:
-            kinectMessage = "Forward";
-            if (lastCommandSent != "forward")
+            if (lastCommandSent != CommandType.Forward)
             {
-              lastCommandSent = "forward";
+              kinectMessage = "Forward";
+              lastCommandSent = CommandType.Forward;
               droneClient.Progress(Drone.Commands.FlightMode.Progressive, pitch: -0.1f);
             }
             break;
           case KinectClient.GestureCommandType.Backward:
-            kinectMessage = "Backward";
-            if (lastCommandSent != "backward")
+            if (lastCommandSent != CommandType.Backward)
             {
-              lastCommandSent = "backward";
+              kinectMessage = "Forward";
+              lastCommandSent = CommandType.Backward;
               droneClient.Progress(Drone.Commands.FlightMode.Progressive, pitch: 0.1f);
             }
             break;
           case KinectClient.GestureCommandType.StrafeForwardLeft:
-            kinectMessage = "Strafe forward Left";
-            if (lastCommandSent != "strafefwdleft")
+            if (lastCommandSent != CommandType.StrafeForwardLeft)
             {
-              lastCommandSent = "strafefwdleft";
+              kinectMessage = "Strafe forward Left";
+              lastCommandSent = CommandType.StrafeForwardLeft;
               droneClient.Progress(Drone.Commands.FlightMode.Progressive, roll: -0.1f, pitch: 0.1f);
             }
             break;
-          case KinectClient.GestureCommandType.StrafeForwardRigth:
-            kinectMessage = "Strafe forward Right";
-            if (lastCommandSent != "strafefwdright")
+          case KinectClient.GestureCommandType.StrafeForwardRight:
+            if (lastCommandSent != CommandType.StrafeForwardRight)
             {
-              lastCommandSent = "strafefwdright";
+              kinectMessage = "Strafe forward Right";
+              lastCommandSent = CommandType.StrafeForwardRight;
               droneClient.Progress(Drone.Commands.FlightMode.Progressive, roll: 0.2f, pitch: 0.1f);
             }
             break;
           case KinectClient.GestureCommandType.StrafeBackwardLeft:
-            kinectMessage = "Strafe backward Left";
-            if (lastCommandSent != "strafebwdleft")
+            if (lastCommandSent != CommandType.StrafeBackwardLeft)
             {
-              lastCommandSent = "strafebwdleft";
+              kinectMessage = "Strafe backward Left";
+              lastCommandSent = CommandType.StrafeBackwardLeft;
               droneClient.Progress(Drone.Commands.FlightMode.Progressive, roll: -0.2f, pitch: -0.1f);
             }
             break;
           case KinectClient.GestureCommandType.StrafeBackwardRight:
-            kinectMessage = "Strafe backward Right";
-            if (lastCommandSent != "strafebwdright")
+            if (lastCommandSent != CommandType.StrafeBackwardRight)
             {
-              lastCommandSent = "strafebwdright";
+              kinectMessage = "Strafe backward Right";
+              lastCommandSent = CommandType.StrafeBackwardRight;
               droneClient.Progress(Drone.Commands.FlightMode.Progressive, roll: 0.2f, pitch: -0.1f);
             }
             break;
           case KinectClient.GestureCommandType.NoPlayerDetected:
-            kinectMessage = "No player detected";
-            if (lastCommandSent != "hover")
+            kinectMessage = "No player detected"; //here because the lastcommand can be Hover
+            if (lastCommandSent != CommandType.Hover)
             {
-              lastCommandSent = "hover";
+              lastCommandSent = CommandType.Hover;
               droneClient.Progress(Drone.Commands.FlightMode.Progressive, 0, 0, 0, 0);
             }
             break;
@@ -285,18 +289,18 @@ namespace OculusParrotKinect
         if (compare > 0)
         {
           oculusXText = "Right";
-          if (lastCommandSent != "right")
+          if (lastCommandSent != CommandType.TurnRight)
           {
-            lastCommandSent = "right";
+            lastCommandSent = CommandType.TurnRight;
             droneClient.Progress(Drone.Commands.FlightMode.Progressive, yaw: 0.4f);
           }
         }
         else
         {
           oculusXText = "Left";
-          if (lastCommandSent != "left")
+          if (lastCommandSent != CommandType.TurnLeft)
           {
-            lastCommandSent = "left";
+            lastCommandSent = CommandType.TurnLeft;
             droneClient.Progress(Drone.Commands.FlightMode.Progressive, yaw: -0.4f);
           }
         }
@@ -311,18 +315,18 @@ namespace OculusParrotKinect
         if (compare > 0)
         {
           oculusYText = "Up";
-          if (lastCommandSent != "up")
+          if (lastCommandSent != CommandType.GoUp)
           {
-            lastCommandSent = "up";
+            lastCommandSent = CommandType.GoUp;
             droneClient.Progress(Drone.Commands.FlightMode.Progressive, gaz: 0.4f);
           }
         }
         else
         {
           oculusYText = "Down";
-          if (lastCommandSent != "down")
+          if (lastCommandSent != CommandType.GoDown)
           {
-            lastCommandSent = "down";
+            lastCommandSent = CommandType.GoDown;
             droneClient.Progress(Drone.Commands.FlightMode.Progressive, gaz: -0.4f);
           }
         }
@@ -357,10 +361,10 @@ namespace OculusParrotKinect
     {
       droneClient.FlatTrim();//before take off send this command
       headPositionStart = OculusClient.GetOrientation();
-      if (lastCommandSent != "takeoff")
+      if (lastCommandSent != CommandType.TakeOff)
       {
         droneClient.Takeoff();
-        lastCommandSent = "takeoff";
+        lastCommandSent = CommandType.TakeOff;
       }
     }
 
@@ -475,9 +479,9 @@ namespace OculusParrotKinect
     private void DrawHud(SpriteBatch spriteBatch)
     {
       //spriteBatch.DrawString(hudFontSmall, String.Format("Left<->Right: {0}  Top<->Down: {1}", oculusXText, oculusYText), new Vector2(400, 220), Color.White);
-      spriteBatch.DrawString(hudFontSmall, String.Format("Last command: {0}", lastCommandSent), new Vector2(400, 240), Microsoft.Xna.Framework.Color.White);
+      //spriteBatch.DrawString(hudFontSmall, String.Format("Last command: {0}", lastCommandSent), new Vector2(400, 240), Microsoft.Xna.Framework.Color.White);
+      spriteBatch.DrawString(hudFontSmall, kinectMessage, new Vector2(400, 240), Microsoft.Xna.Framework.Color.White);
 
-      //spriteBatch.DrawString(hudFontSmall, String.Format("{0} - {1}", kinectMessage, kinectStatusMessage), new Vector2(400, 560), Color.White);
       spriteBatch.DrawString(hudFontSmall, String.Format("Battery: {0}%  Altitude: {1}", droneClient.NavigationData.Battery.Percentage, droneClient.NavigationData.Altitude), new Vector2(400, 540), Microsoft.Xna.Framework.Color.White);
     }
   }
