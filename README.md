@@ -27,7 +27,6 @@ The code is a mess and don't expect fancy HUD or whatever, it just works :).<br 
 Till now I was only focused on having the pieces to work together. I plan to organize and better implement the code in my spare time.<br />
 [Here you can see a simple video of it working](http://www.youtube.com/watch?v=8VuLyabbkWg)
 
-<iframe width="420" height="315" src="//www.youtube.com/embed/8VuLyabbkWg" frameborder="0" allowfullscreen></iframe>
 
 ##Updates
 - Fixed some bugs
