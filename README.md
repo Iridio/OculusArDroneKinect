@@ -16,8 +16,7 @@ With left arm extended to the left and right hand near the right shoulder -> mov
 The right movements are simply the left ones mirrored.<br />
 
 ## Credits
-For the Ar.Drone library, I used the one from [Ruslan Balanukhin](https://github.com/Ruslan-B).<br />
-The [AR.Drone projet](https://github.com/Ruslan-B/AR.Drone) and the [.NET FFMpeg wrapper](https://github.com/Ruslan-B/FFmpeg.AutoGen).<br />
+For the Ar.Drone library, I used the one from [Ruslan Balanukhin](https://github.com/Ruslan-B).He created the [AR.Drone projet](https://github.com/Ruslan-B/AR.Drone) and the [.NET FFMpeg wrapper](https://github.com/Ruslan-B/FFmpeg.AutoGen).<br />
 For the Oculus implementation, I used the [Sunburn StereoscopicRenderer plugin](http://www.synapsegaming.com/downloads/resource.aspx?guid=46f57a92-57b3-4e34-80e0-418d5cf737f3) as a starting point. It's an implementation made by the guy behind the [Holophone3D](http://holophone3d.com).<br />
 I learned a lot from these projects.<br />
 
