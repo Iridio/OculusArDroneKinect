@@ -138,7 +138,7 @@ namespace OculusParrotKinect
           case KinectClient.GestureCommandType.Backward:
             if (lastCommandSent != CommandType.Backward)
             {
-              kinectMessage = "Forward";
+              kinectMessage = "Backward";
               lastCommandSent = CommandType.Backward;
               droneClient.Progress(Drone.Commands.FlightMode.Progressive, pitch: 0.1f);
             }

@@ -161,7 +161,7 @@ namespace OculusParrotKinect.Kinect
             var elbowRight = playerSkeleton.Joints[JointType.ElbowRight];
             var hip = playerSkeleton.Joints[JointType.HipCenter];
             //for debug
-            StatusMessage = String.Format("LH z:{0} - S X:{1} ", handLeft.Position.Z, spine.Position.Z);
+            //StatusMessage = String.Format("LH z:{0} - S X:{1} ", handLeft.Position.Z, spine.Position.Z);
 
             bool left = handLeft.Position.Y > hip.Position.Y && handLeft.Position.X < elbowLeft.Position.X && ((elbowLeft.Position.X - handLeft.Position.X) > -0.2);
             bool right = handRight.Position.Y > hip.Position.Y && handRight.Position.X > elbowRight.Position.X && ((handRight.Position.X - elbowRight.Position.X) > 0.2);
