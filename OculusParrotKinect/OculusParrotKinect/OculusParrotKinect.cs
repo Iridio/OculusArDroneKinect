@@ -23,8 +23,8 @@ namespace OculusParrotKinect
   /// </summary>
   public class OculusParrotKinect : Game
   {
-    bool goFullScreen = false;
-    bool drawOculus = false;
+    bool goFullScreen = true;
+    bool drawOculus = true;
     bool drawTestImage = false;
     bool detectFaces = false;
     float scaleImageFactor = 1.0f;
